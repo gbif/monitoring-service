@@ -10,7 +10,7 @@
   <groupId>org.gbif</groupId>
   <artifactId>monitoring-service</artifactId>
   <packaging>jar</packaging>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.1</version>
 
   <name>GBIF Service Monitor</name>
 
@@ -32,7 +32,7 @@
     <connection>scm:git:git@github.com:gbif/monitoring-service.git</connection>
     <url>https://github.com/gbif/monitoring-service</url>
     <developerConnection>scm:git:git@github.com:gbif/monitoring-service.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>monitoring-service-0.1</tag>
   </scm>
 
   <build>
@@ -79,10 +79,8 @@
             <configuration>
               <createDependencyReducedPom>true</createDependencyReducedPom>
               <transformers>
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>org.gbif.ws.app.Application</mainClass>
                 </transformer>
               </transformers>
