@@ -28,6 +28,13 @@
     <jettyVersion>9.1.0.v20131115</jettyVersion>
   </properties>
 
+  <scm>
+    <connection>scm:git:git@github.com:gbif/monitoring-service.git</connection>
+    <url>https://github.com/gbif/monitoring-service</url>
+    <developerConnection>scm:git:git@github.com:gbif/monitoring-service.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
   <build>
     <resources>
       <resource>
