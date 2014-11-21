@@ -16,14 +16,14 @@
 
   <properties>
     <maven-shade-plugin.version>2.3</maven-shade-plugin.version>
-    <gbif-microservice.version>0.1-SNAPSHOT</gbif-microservice.version>
+    <gbif-microservice.version>0.1</gbif-microservice.version>
     <curator.version>2.6.0</curator.version>
     <jersey.version>1.18.1</jersey.version>
     <jersey-test.version>1.8</jersey-test.version>
     <jackson.version>1.9.2</jackson.version>
     <jaxb-api.version>2.2.2</jaxb-api.version>
     <guava.version>16.0.1</guava.version>
-    <gbif-common.version>0.17-SNAPSHOT</gbif-common.version>
+    <gbif-common.version>0.17</gbif-common.version>
     <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
     <jettyVersion>9.1.0.v20131115</jettyVersion>
   </properties>
