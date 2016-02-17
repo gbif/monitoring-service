@@ -10,7 +10,7 @@
   <groupId>org.gbif</groupId>
   <artifactId>monitoring-service</artifactId>
   <packaging>jar</packaging>
-  <version>0.2-SNAPSHOT</version>
+  <version>0.2</version>
 
   <name>GBIF Service Monitor</name>
 
@@ -32,7 +32,7 @@
     <connection>scm:git:git@github.com:gbif/monitoring-service.git</connection>
     <url>https://github.com/gbif/monitoring-service</url>
     <developerConnection>scm:git:git@github.com:gbif/monitoring-service.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>monitoring-service-0.2</tag>
   </scm>
 
   <build>
