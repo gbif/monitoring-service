@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.gbif</groupId>
     <artifactId>motherpom</artifactId>
-    <version>24</version>
+    <version>35</version>
   </parent>
 
   <groupId>org.gbif</groupId>
@@ -16,14 +16,14 @@
 
   <properties>
     <maven-shade-plugin.version>2.3</maven-shade-plugin.version>
-    <gbif-microservice.version>0.4-SNAPSHOT</gbif-microservice.version>
+    <gbif-microservice.version>0.4</gbif-microservice.version>
     <curator.version>2.9.0</curator.version>
     <jersey.version>1.19</jersey.version>
     <jersey-test.version>1.8</jersey-test.version>
     <jackson.version>1.9.11</jackson.version>
     <jaxb-api.version>2.2.12</jaxb-api.version>
     <guava.version>16.0.1</guava.version>
-    <gbif-common.version>0.19</gbif-common.version>
+    <gbif-common.version>0.23</gbif-common.version>
     <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
     <jetty.version>9.2.7.v20150116</jetty.version>
   </properties>
