@@ -1,6 +1,6 @@
 package org.gbif.service.monitoring.model;
 
-import org.gbif.ws.discovery.conf.ServiceDetails;
+import org.gbif.discovery.conf.ServiceDetails;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.apache.curator.x.discovery.ServiceInstance;
 public class Service {
 
   //List of GBIF services that can be registered in Zookeeper.
-  public static List<String> REGISTERED_SERVICES = new ImmutableList.Builder<String>().add("occurrence-ws")
+  public static final List<String> REGISTERED_SERVICES = new ImmutableList.Builder<String>().add("occurrence-ws")
     .add("registry-ws")
     .add("checklistbank-ws")
     .add("crawler-ws")

@@ -16,16 +16,18 @@
 
   <properties>
     <maven-shade-plugin.version>2.3</maven-shade-plugin.version>
-    <gbif-microservice.version>0.4</gbif-microservice.version>
-    <curator.version>2.9.0</curator.version>
+    <gbif-microservice.version>0.7-SNAPSHOT</gbif-microservice.version>
+    <service-discovery.version>0.1-SNAPSHOT</service-discovery.version>
+    <curator.version>2.9.1</curator.version>
     <jersey.version>1.19</jersey.version>
     <jersey-test.version>1.8</jersey-test.version>
     <jackson.version>1.9.11</jackson.version>
     <jaxb-api.version>2.2.12</jaxb-api.version>
     <guava.version>16.0.1</guava.version>
-    <gbif-common.version>0.23</gbif-common.version>
+    <gbif-common.version>0.34</gbif-common.version>
     <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
-    <jetty.version>9.2.7.v20150116</jetty.version>
+    <jetty.version>9.3.8.v20160314</jetty.version>
+    <jetty-jsp.version>9.2.21.v20170120</jetty-jsp.version>
   </properties>
 
   <scm>
@@ -53,8 +55,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>${maven-compiler-plugin.version}</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -245,7 +247,7 @@
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-jsp</artifactId>
-      <version>${jetty.version}</version>
+      <version>${jetty-jsp.version}</version>
       <scope>runtime</scope>
     </dependency>
 
@@ -259,6 +261,17 @@
       <groupId>org.gbif</groupId>
       <artifactId>gbif-common</artifactId>
       <version>${gbif-common.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.gbif</groupId>
+      <artifactId>service-discovery</artifactId>
+      <version>${service-discovery.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.codehaus.jackson</groupId>
+          <artifactId>jackson-core-asl</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 

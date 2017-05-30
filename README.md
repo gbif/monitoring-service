@@ -32,7 +32,7 @@ embeds an Jetty server and accepts the following parameters:
    
  Example:
  
- ```java -jar target/monitoring-service-0.2-SNAPSHOT.jar -httpPort 8084 -httpAdminPort 8085 -stopSecret stop  -conf target/classes/application.properties```
+ ```java -jar target/monitoring-service-0.3-SNAPSHOT.jar -httpPort 8084 -httpAdminPort 8085 -stopSecret stop  -conf target/classes/application.properties```
  
 ## How to use this application
 This application exposes two basic services described below:

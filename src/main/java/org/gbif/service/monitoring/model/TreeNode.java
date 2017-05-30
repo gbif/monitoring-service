@@ -1,6 +1,6 @@
 package org.gbif.service.monitoring.model;
 
-import org.gbif.ws.discovery.conf.ServiceDetails;
+import org.gbif.discovery.conf.ServiceDetails;
 
 import java.util.List;
 
@@ -10,7 +10,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import org.apache.curator.x.discovery.ServiceInstance;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
@@ -150,12 +149,12 @@ public class TreeNode {
    TreeNode envNode = new TreeNode();
    envNode.setName(environment.getType().name().toLowerCase());
    envNode.setType(NodeType.ENVIRONMENT);
-   envNode.setData(MAPPER.convertValue(environment,JsonNode.class));
+   envNode.setData(MAPPER.convertValue(environment, JsonNode.class));
    ImmutableList.Builder<TreeNode> children = new ImmutableList.Builder<TreeNode>();
    for(Service service : environment.getServices()){
      children.add(toD3Node(service));
    }
-    envNode.setChildren(children.build());
+   envNode.setChildren(children.build());
    return envNode;
   }
 
@@ -166,8 +165,8 @@ public class TreeNode {
     TreeNode serviceNode = new TreeNode();
     serviceNode.setName(service.getName());
     serviceNode.setType(NodeType.SERVICE);
-    serviceNode.setData(MAPPER.convertValue(service,JsonNode.class));
-    ImmutableList.Builder<TreeNode> children = new ImmutableList.Builder<TreeNode>();
+    serviceNode.setData(MAPPER.convertValue(service, JsonNode.class));
+    ImmutableList.Builder<TreeNode> children = new ImmutableList.Builder<>();
     if(service.getInstances() != null) {
       for (ServiceInstance<ServiceDetails> serviceInstance : service.getInstances()) {
         children.add(toD3Node(serviceInstance));

@@ -5,7 +5,7 @@ import org.gbif.service.monitoring.model.Environment;
 import org.gbif.service.monitoring.model.InstanceResponse;
 import org.gbif.service.monitoring.model.Platform;
 import org.gbif.service.monitoring.model.Service;
-import org.gbif.ws.discovery.conf.ServiceDetails;
+import org.gbif.discovery.conf.ServiceDetails;
 
 import java.io.IOException;
 import java.net.URL;
@@ -220,7 +220,7 @@ public class EnvironmentsMonitorResource {
   public Viewable getGraph(@PathParam("env") String env){
     try {
       Map<String, Object> map = new HashMap<>();
-      map.put("data",MAPPER.writeValueAsString(TreeNode.toD3Node(getEnvironment(env))));
+      map.put("data", MAPPER.writeValueAsString(TreeNode.toD3Node(getEnvironment(env))));
       return new Viewable("/graph",map);
     } catch(IOException ex){
       throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
@@ -233,7 +233,7 @@ public class EnvironmentsMonitorResource {
   public Viewable getGraph(@PathParam("env") String env, @PathParam("service") String serviceName){
     try {
       Map<String, Object> map = new HashMap<>();
-      map.put("data",MAPPER.writeValueAsString(TreeNode.toD3Node(getService(env, serviceName))));
+      map.put("data", MAPPER.writeValueAsString(TreeNode.toD3Node(getService(env, serviceName))));
       return new Viewable("/graph",map);
     } catch(IOException ex){
       throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
@@ -245,7 +245,7 @@ public class EnvironmentsMonitorResource {
    */
   private ServiceDiscovery<ServiceDetails> discovery(Environment.Type env) {
       CuratorFramework curator = curators.get(env);
-      JsonInstanceSerializer<ServiceDetails> serializer = new JsonInstanceSerializer<ServiceDetails>(ServiceDetails.class);
+      JsonInstanceSerializer<ServiceDetails> serializer = new JsonInstanceSerializer<>(ServiceDetails.class);
       return ServiceDiscoveryBuilder.builder(ServiceDetails.class)
         .client(curator)
         .basePath(settings.getProperty(String.format(ZK_SERVICES_PATH_FMT, env.name().toLowerCase())))
@@ -258,12 +258,12 @@ public class EnvironmentsMonitorResource {
    */
   private Environment getEnvironmentDetails(Environment.Type type) {
     try (ServiceDiscovery<ServiceDetails> discovery = discovery(type)) {
-      ImmutableList.Builder<Service> servicesBuilder = new ImmutableList.Builder<Service>();
-      for (String serviceName : discovery.queryForNames()) {
-        servicesBuilder.add(new Service(serviceName,Lists.newArrayList(discovery.queryForInstances(serviceName))));
+      ImmutableList.Builder<Service> servicesBuilder = new ImmutableList.Builder<>();
+      for (String serviceName : Service.REGISTERED_SERVICES) {
+        servicesBuilder.add(new Service(serviceName, Lists.newArrayList(discovery.queryForInstances(serviceName))));
       }
       //Adds the services that aren't running/registered
-      return new Environment(type,servicesBuilder.addAll(addUnAvailableServices(servicesBuilder.build())).build());
+      return new Environment(type, servicesBuilder.addAll(addUnAvailableServices(servicesBuilder.build())).build());
     } catch (Exception ex) {
       Throwables.propagate(ex);
     }
