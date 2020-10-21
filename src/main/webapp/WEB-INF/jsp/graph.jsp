@@ -122,7 +122,7 @@
       .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
 
-    root = JSON.parse('${it.data}');
+    root = JSON.parse('${data}');
     root.x0 = h / 2;
     root.y0 = 0;
 

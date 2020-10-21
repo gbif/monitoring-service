@@ -1,16 +1,13 @@
 package org.gbif.service.monitoring.model;
 
-import org.gbif.discovery.conf.ServiceDetails;
-
 import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import org.apache.curator.x.discovery.ServiceInstance;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * Class that represents a Node in a tree.
@@ -30,7 +27,7 @@ public class TreeNode {
 
   private NodeType type;
 
-  private JsonNode data;
+  private Object data;
 
   /**
    * Node name.
@@ -68,11 +65,11 @@ public class TreeNode {
   /**
    *Arbitrary JSON data to show detailed information about this node.
    */
-  public JsonNode getData() {
+  public Object getData() {
     return data;
   }
 
-  public void setData(JsonNode data) {
+  public void setData(Object data) {
     this.data = data;
   }
 
@@ -133,8 +130,8 @@ public class TreeNode {
     TreeNode platformNode = new TreeNode();
     platformNode.setName(platform.getName());
     platformNode.setType(NodeType.PLATFORM);
-    platformNode.setData(MAPPER.convertValue(platform, JsonNode.class));
-    ImmutableList.Builder<TreeNode> children = new ImmutableList.Builder<TreeNode>();
+    platformNode.setData(MAPPER.convertValue(platform, Object.class));
+    ImmutableList.Builder<TreeNode> children = new ImmutableList.Builder<>();
     for(Environment environment : platform.getEnvironments()){
       children.add(toD3Node(environment));
     }
@@ -149,7 +146,7 @@ public class TreeNode {
    TreeNode envNode = new TreeNode();
    envNode.setName(environment.getType().name().toLowerCase());
    envNode.setType(NodeType.ENVIRONMENT);
-   envNode.setData(MAPPER.convertValue(environment, JsonNode.class));
+   envNode.setData(MAPPER.convertValue(environment, Object.class));
    ImmutableList.Builder<TreeNode> children = new ImmutableList.Builder<TreeNode>();
    for(Service service : environment.getServices()){
      children.add(toD3Node(service));
@@ -165,10 +162,10 @@ public class TreeNode {
     TreeNode serviceNode = new TreeNode();
     serviceNode.setName(service.getName());
     serviceNode.setType(NodeType.SERVICE);
-    serviceNode.setData(MAPPER.convertValue(service, JsonNode.class));
+    serviceNode.setData(MAPPER.convertValue(service, Object.class));
     ImmutableList.Builder<TreeNode> children = new ImmutableList.Builder<>();
     if(service.getInstances() != null) {
-      for (ServiceInstance<ServiceDetails> serviceInstance : service.getInstances()) {
+      for (ServiceInstance<Object> serviceInstance : service.getInstances()) {
         children.add(toD3Node(serviceInstance));
       }
     }
@@ -180,14 +177,14 @@ public class TreeNode {
    * Converts an Service to a TreeNode.
    * Ports will be listed as its children.
    */
-  public static TreeNode toD3Node(ServiceInstance<ServiceDetails> serviceInstance) {
+  public static TreeNode toD3Node(ServiceInstance<Object> serviceInstance) {
     TreeNode serviceInstanceNode = new TreeNode();
     serviceInstanceNode.setName(serviceInstance.getId());
     serviceInstanceNode.setType(NodeType.SERVICE_INSTANCE);
-    serviceInstanceNode.setData(MAPPER.convertValue(serviceInstance,JsonNode.class));
-    ImmutableList.Builder<TreeNode> children = new ImmutableList.Builder<TreeNode>();
-    children.add(portToD3Node(serviceInstance.getPayload().getServiceConfiguration().getExternalPort()));
-    children.add(portToD3Node(serviceInstance.getPayload().getServiceConfiguration().getExternalAdminPort()));
+    serviceInstanceNode.setData(MAPPER.convertValue(serviceInstance, Object.class));
+    ImmutableList.Builder<TreeNode> children = new ImmutableList.Builder<>();
+    //children.add(portToD3Node(serviceInstance.getPayload().getServiceConfiguration().getExternalPort()));
+    //children.add(portToD3Node(serviceInstance.getPayload().getServiceConfiguration().getExternalAdminPort()));
     serviceInstanceNode.setChildren(children.build());
     return serviceInstanceNode;
   }
@@ -199,7 +196,7 @@ public class TreeNode {
     TreeNode portNode = new TreeNode();
     portNode.setName(":" + port.toString());
     portNode.setType(NodeType.PORT);
-    portNode.setData(MAPPER.convertValue(port,JsonNode.class));
+    portNode.setData(MAPPER.convertValue(port, Object.class));
     return portNode;
   }
 }

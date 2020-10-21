@@ -1,0 +1,10 @@
+curators:
+  DEV:
+    zkHost: @dev.zkhost@
+    zkPath: @dev.services.zkpath@
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp

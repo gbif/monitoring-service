@@ -1,83 +1,41 @@
 package org.gbif.service.monitoring;
 
-import org.gbif.service.monitoring.model.Environment;
-import org.gbif.service.monitoring.resources.EnvironmentsMonitorResource;
-import org.gbif.utils.file.properties.PropertiesUtil;
-import org.gbif.ws.app.ConfUtils;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import javax.ws.rs.core.Application;
-
-import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.retry.RetryNTimes;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.cloud.zookeeper.ZookeeperAutoConfiguration;
+import org.springframework.cloud.zookeeper.discovery.ZookeeperDiscoveryAutoConfiguration;
+import org.springframework.cloud.zookeeper.discovery.ZookeeperDiscoveryClientConfiguration;
+import org.springframework.cloud.zookeeper.serviceregistry.ZookeeperAutoServiceRegistrationAutoConfiguration;
+import org.springframework.cloud.zookeeper.serviceregistry.ZookeeperServiceRegistryAutoConfiguration;
+import org.springframework.cloud.zookeeper.support.CuratorServiceDiscoveryAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * Jersey application that configure the environment for the EnvironmentsMonitorResource.
  */
-public class MonitoringApplication extends Application {
+@EnableConfigurationProperties
+@ComponentScan(
+  basePackages = {
+    "org.gbif.service.monitoring.resources",
+    "org.gbif.service.monitoring.conf"
+  }
+)
+@SpringBootApplication(exclude = {ZookeeperAutoConfiguration.class, CuratorServiceDiscoveryAutoConfiguration.class,
+  ZookeeperDiscoveryClientConfiguration.class, ZookeeperAutoServiceRegistrationAutoConfiguration.class,
+  ZookeeperDiscoveryAutoConfiguration.class, ZookeeperServiceRegistryAutoConfiguration.class})
+public class MonitoringApplication extends SpringBootServletInitializer {
 
-  //Default name of application settings file
-  private static final String APP_CONF_FILE = "application.properties";
-
-  //Pattern of the ZkHost for each environment
-  private static final String ZKHOST_FMT = "zkhost_%s";
-
-  //Loads the settings file
-  private static final Properties CONF = loadConfiguration();
-
-  //Loads the curators framework for each environment
-  private Map<Environment.Type, CuratorFramework> curators = loadCurators(CONF);
-
-  //Configure the resource as a singleton.
   @Override
-  public Set<Object> getSingletons() {
-    return new ImmutableSet.Builder<Object>().add(new EnvironmentsMonitorResource(curators,CONF)).build();
+  protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+    return builder.sources(MonitoringApplication.class);
   }
 
-  /**
-   * Loads the configuration file.
-   */
-  private static Properties loadConfiguration() {
-    try {
-      return PropertiesUtil.readFromFile(ConfUtils.getAppConfFile(APP_CONF_FILE));
-    } catch (IOException ex) {
-      Throwables.propagate(ex);
-    }
-    throw new IllegalStateException();
-  }
-
-  /**
-   * Builds a new instance of a CuratorFramework client for each registered environment.
-   */
-  private static Map<Environment.Type, CuratorFramework> loadCurators(Properties properties) {
-    ImmutableMap.Builder<Environment.Type, CuratorFramework> curatorsBuilder = new ImmutableMap.Builder<Environment.Type, CuratorFramework>();
-    for (Environment.Type envType : Environment.Type.values()) {
-      String envZkHost = String.format(ZKHOST_FMT, envType.name().toLowerCase());
-      if (properties.containsKey(envZkHost)) {
-        curatorsBuilder.put(envType, curator(properties.getProperty(envZkHost)));
-      }
-    }
-    return curatorsBuilder.build();
-  }
-
-  /**
-   * Instantiates a Curator read-only client.
-   */
-  private static CuratorFramework curator(String zkHost) {
-    CuratorFramework curator = CuratorFrameworkFactory.builder()
-      .connectString(zkHost)
-      .retryPolicy(new RetryNTimes(5,1000))
-      .canBeReadOnly(true)
-      .build();
-    curator.start();
-    return curator;
+  public static void main(String[] args) {
+    SpringApplication.run(MonitoringApplication.class, args);
   }
 
 }
