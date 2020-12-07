@@ -1,15 +1,11 @@
 package org.gbif.service.monitoring;
 
 
+import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.zookeeper.ZookeeperAutoConfiguration;
-import org.springframework.cloud.zookeeper.discovery.ZookeeperDiscoveryAutoConfiguration;
-import org.springframework.cloud.zookeeper.discovery.ZookeeperDiscoveryClientConfiguration;
-import org.springframework.cloud.zookeeper.serviceregistry.ZookeeperAutoServiceRegistrationAutoConfiguration;
-import org.springframework.cloud.zookeeper.serviceregistry.ZookeeperServiceRegistryAutoConfiguration;
-import org.springframework.cloud.zookeeper.support.CuratorServiceDiscoveryAutoConfiguration;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -22,9 +18,9 @@ import org.springframework.context.annotation.ComponentScan;
     "org.gbif.service.monitoring.conf"
   }
 )
-@SpringBootApplication(exclude = {ZookeeperAutoConfiguration.class, CuratorServiceDiscoveryAutoConfiguration.class,
-  ZookeeperDiscoveryClientConfiguration.class, ZookeeperAutoServiceRegistrationAutoConfiguration.class,
-  ZookeeperDiscoveryAutoConfiguration.class, ZookeeperServiceRegistryAutoConfiguration.class})
+@SpringBootApplication
+@EnableDiscoveryClient
+@EnableAdminServer
 public class MonitoringApplication {
 
   public static void main(String[] args) {

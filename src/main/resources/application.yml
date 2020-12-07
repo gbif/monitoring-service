@@ -1,10 +1,35 @@
 curators:
   DEV:
-    zkHost: @dev.zkhost@
-    zkPath: @dev.services.zkpath@
-
+    zkHost:
+    zkPath: /dev/services
+  UAT:
+    zkHost:
+    zkPath: /uat/services
+  PROD:
+    zkHost:
+    zkPath: /uat/services
 spring:
-  mvc:
-    view:
-      prefix: /WEB-INF/jsp/
-      suffix: .jsp
+  application:
+    name: monitoring-service
+  cloud:
+    config:
+      enabled: false
+    zookeeper:
+      connect-string:
+      discovery:
+        root: dev/services
+        enabled: false
+        metadata:
+          management.context-path: /admin
+          health.path: /ping
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      path-mapping:
+        health: /ping
+      base-path: /admin
+  endpoint:
+    health:
+      show-details: ALWAYS
